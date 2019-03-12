@@ -1,24 +1,25 @@
 {
-  "name": "reason-apollo",
-  "sources": [
-    {
-      "dir": "src",
-      "public": "all",
-      "subdirs": ["graphql-types"]
-    },
-    {
-      "dir": "examples",
-      "type": "dev"
-    }
-  ],
-  "bs-dependencies": ["reason-react"],
-  "bsc-flags": ["-bs-super-errors"],
-  "refmt": 3,
-  "package-specs": [
-    {
-      "module": "es6",
-      "in-source": true
-    }
-  ],
-  "suffix": ".bs.js"
+    "name": "reason-apollo",
+    "sources": [
+        {
+            "dir": "src",
+            "public": "all",
+            "subdirs": ["graphql-types"]
+        },
+        {
+            "dir": "examples",
+            "type": "dev"
+        }
+    ],
+    "bs-dependencies": ["reason-react"],
+    "bsc-flags": ["-bs-super-errors"],
+    "refmt": 3,
+    "ppx-flags": ["reason-react/_build/default/jsx_ppx/reactjs_jsx_ppx_v3.exe"],
+    "package-specs": [
+        {
+            "module": "es6",
+            "in-source": true
+        }
+    ],
+    "suffix": ".bs.js"
 }

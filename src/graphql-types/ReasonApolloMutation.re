@@ -1,6 +1,6 @@
-open ReasonApolloTypes;
-
 [@bs.config {jsx: 3}];
+
+open ReasonApolloTypes;
 
 type renderPropObjJS = {
   .
