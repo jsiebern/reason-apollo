@@ -3,7 +3,7 @@ open ReasonApolloTypes;
 module Make = (Config: ReasonApolloTypes.Config) => {
   [@bs.module] external gql: ReasonApolloTypes.gql = "graphql-tag";
   [@bs.module "react-apollo"]
-  external subscriptionComponent: ReasonReact.reactClass = "Subscription";
+  external subscriptionComponent: React.component('a) = "Subscription";
 
   let graphQLSubscriptionAST = gql(. Config.query);
 
@@ -61,19 +61,19 @@ module Make = (Config: ReasonApolloTypes.Config) => {
       loading: apolloData##loading,
     };
 
+  [@react.component]
   let make =
       (
         ~variables: option(Js.Json.t)=?,
-        children: renderPropObj => ReasonReact.reactElement,
+        ~children: renderPropObj => React.element,
       ) =>
-    ReasonReact.wrapJsForReason(
-      ~reactClass=subscriptionComponent,
-      ~props=
-        Js.Nullable.{
-          "subscription": graphQLSubscriptionAST,
-          "variables": variables |> fromOption,
-        },
-      apolloData =>
-      apolloData |> convertJsInputToReason |> children
+    React.createElement(
+      subscriptionComponent,
+      Js.Nullable.{
+        "subscription": graphQLSubscriptionAST,
+        "variables": variables |> fromOption,
+        "children": apolloData =>
+          apolloData |> convertJsInputToReason |> children,
+      },
     );
 };

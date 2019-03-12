@@ -52,7 +52,7 @@ type renderPropObjJS = {
 module Make = (Config: ReasonApolloTypes.Config) => {
   [@bs.module] external gql: ReasonApolloTypes.gql = "graphql-tag";
   [@bs.module "react-apollo"]
-  external queryComponent: ReasonReact.reactClass = "Query";
+  external queryComponent: React.component('a) = "Query";
   type response = queryResponse(Config.t);
 
   type renderPropObj = {
@@ -140,6 +140,7 @@ module Make = (Config: ReasonApolloTypes.Config) => {
                   ),
   };
 
+  [@react.component]
   let make =
       (
         ~variables: option(Js.Json.t)=?,
@@ -155,29 +156,28 @@ module Make = (Config: ReasonApolloTypes.Config) => {
         ~partialRefetch: option(bool)=?,
         ~delay: option(bool)=?,
         ~context: option(Js.Json.t)=?,
-        children: renderPropObj => ReasonReact.reactElement,
+        ~children: renderPropObj => React.element,
       ) =>
-    ReasonReact.wrapJsForReason(
-      ~reactClass=queryComponent,
-      ~props=
-        Js.Nullable.{
-          "query": graphqlQueryAST,
-          "variables": variables |> fromOption,
-          "pollInterval": pollInterval |> fromOption,
-          "notifyOnNetworkStatusChange":
-            notifyOnNetworkStatusChange |> fromOption,
-          "fetchPolicy": fetchPolicy |> fromOption,
-          "errorPolicy": errorPolicy |> fromOption,
-          "ssr": ssr |> fromOption,
-          "displayName": displayName |> fromOption,
-          "skip": skip |> fromOption,
-          "onCompleted": onCompleted |> fromOption,
-          "onError": onError |> fromOption,
-          "partialRefetch": partialRefetch |> fromOption,
-          "delay": delay |> fromOption,
-          "context": context |> fromOption,
-        },
-      apolloData =>
-      apolloData |> convertJsInputToReason |> children
+    React.createElement(
+      queryComponent,
+      Js.Nullable.{
+        "query": graphqlQueryAST,
+        "variables": variables |> fromOption,
+        "pollInterval": pollInterval |> fromOption,
+        "notifyOnNetworkStatusChange":
+          notifyOnNetworkStatusChange |> fromOption,
+        "fetchPolicy": fetchPolicy |> fromOption,
+        "errorPolicy": errorPolicy |> fromOption,
+        "ssr": ssr |> fromOption,
+        "displayName": displayName |> fromOption,
+        "skip": skip |> fromOption,
+        "onCompleted": onCompleted |> fromOption,
+        "onError": onError |> fromOption,
+        "partialRefetch": partialRefetch |> fromOption,
+        "delay": delay |> fromOption,
+        "context": context |> fromOption,
+        "children": apolloData =>
+          apolloData |> convertJsInputToReason |> children,
+      },
     );
 };

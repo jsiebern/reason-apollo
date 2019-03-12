@@ -20,8 +20,6 @@ module Make = (Config: Config) => {
     } =
     "%identity";
   [@bs.module] external gql: ReasonApolloTypes.gql = "graphql-tag";
-  [@bs.module "react-apollo"]
-  external mutationComponent: ReasonReact.reactClass = "Mutation";
   let graphqlMutationAST = gql(. Config.query);
   type response = mutationResponse(Config.t);
   type renderPropObj = {
@@ -100,26 +98,30 @@ module Make = (Config: Config) => {
     loading: apolloData##loading,
     networkStatus: apolloData##networkStatus->Js.Nullable.toOption,
   };
+
+  [@bs.module "react-apollo"]
+  external mutationComponent: React.component('a) = "Mutation";
+
+  [@react.component]
   let make =
       (
         ~variables: option(Js.Json.t)=?,
         ~onError: option(unit => unit)=?,
         ~onCompleted: option(unit => unit)=?,
-        children: (apolloMutation, renderPropObj) => ReasonReact.reactElement,
+        ~children: (apolloMutation, renderPropObj) => React.element,
       ) =>
-    ReasonReact.wrapJsForReason(
-      ~reactClass=mutationComponent,
-      ~props=
-        Js.Nullable.{
-          "mutation": graphqlMutationAST,
-          "variables": variables |> fromOption,
-          "onError": onError |> fromOption,
-          "onCompleted": onCompleted |> fromOption,
-        },
-      (mutation, apolloData) =>
-      children(
-        apolloMutationFactory(~jsMutation=mutation),
-        convertJsInputToReason(apolloData),
-      )
+    React.createElement(
+      mutationComponent,
+      Js.Nullable.{
+        "mutation": graphqlMutationAST,
+        "variables": variables |> fromOption,
+        "onError": onError |> fromOption,
+        "onCompleted": onCompleted |> fromOption,
+        "children": (mutation, apolloData) =>
+          children(
+            apolloMutationFactory(~jsMutation=mutation),
+            convertJsInputToReason(apolloData),
+          ),
+      },
     );
 };
