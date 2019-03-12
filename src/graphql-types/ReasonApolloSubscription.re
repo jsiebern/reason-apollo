@@ -1,5 +1,7 @@
 open ReasonApolloTypes;
 
+[@bs.config {jsx: 3}];
+
 module Make = (Config: ReasonApolloTypes.Config) => {
   [@bs.module] external gql: ReasonApolloTypes.gql = "graphql-tag";
   [@bs.module "react-apollo"]

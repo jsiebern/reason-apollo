@@ -1,5 +1,7 @@
 open ReasonApolloTypes;
 
+[@bs.config {jsx: 3}];
+
 [@bs.deriving abstract]
 type updateQueryOptions = {
   [@bs.optional]
