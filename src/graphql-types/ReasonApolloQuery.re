@@ -182,19 +182,19 @@ module Make = (Config: ReasonApolloTypes.Config) => {
       ) =>
     <JsQuery
       query=graphqlQueryAST
-      variables
-      pollInterval
-      notifyOnNetworkStatusChange
-      fetchPolicy
-      errorPolicy
-      ssr
-      displayName
-      skip
-      onCompleted
-      onError
-      partialRefetch
-      delay
-      context>
+      ?variables
+      ?pollInterval
+      ?notifyOnNetworkStatusChange
+      ?fetchPolicy
+      ?errorPolicy
+      ?ssr
+      ?displayName
+      ?skip
+      ?onCompleted
+      ?onError
+      ?partialRefetch
+      ?delay
+      ?context>
       {apolloData => apolloData |> convertJsInputToReason |> children}
     </JsQuery>;
 };

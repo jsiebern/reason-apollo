@@ -135,7 +135,7 @@ module Make = (Config: Config) => {
         ~onCompleted: option(unit => unit)=?,
         ~children: (apolloMutation, renderPropObj) => React.element,
       ) =>
-    <JsMutation mutation=graphqlMutationAST variables onError onCompleted>
+    <JsMutation mutation=graphqlMutationAST ?variables ?onError ?onCompleted>
       {(mutation, apolloData) =>
          children(
            apolloMutationFactory(~jsMutation=mutation),
